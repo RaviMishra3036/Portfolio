@@ -11,6 +11,7 @@ import AdminEducation from '@/pages/admin/AdminEducation';
 import AdminCertifications from '@/pages/admin/AdminCertifications';
 import AdminAchievements from '@/pages/admin/AdminAchievements';
 import AdminServices from '@/pages/admin/AdminServices';
+import AdminContact from '@/pages/admin/AdminContact';
 import AdminMessages from '@/pages/admin/AdminMessages';
 import AdminResume from '@/pages/admin/AdminResume';
 import AdminSocialLinks from '@/pages/admin/AdminSocialLinks';
@@ -39,6 +40,7 @@ export default function App() {
         <Route path="certifications" element={<AdminCertifications />} />
         <Route path="achievements" element={<AdminAchievements />} />
         <Route path="services" element={<AdminServices />} />
+        <Route path="contact" element={<AdminContact />} />
         <Route path="messages" element={<AdminMessages />} />
         <Route path="resume" element={<AdminResume />} />
         <Route path="social-links" element={<AdminSocialLinks />} />

@@ -43,7 +43,7 @@ export default function Portfolio() {
         <Certifications certifications={certifications} />
         <Achievements achievements={achievements} />
         <ResumeSection profile={profile} />
-        <Contact />
+        <Contact profile={profile} />
       </main>
       <Footer />
       <AIChat />

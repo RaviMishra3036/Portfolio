@@ -20,6 +20,7 @@ const navItems = [
   { to: '/admin/certifications', label: 'Certifications', icon: Award, end: false },
   { to: '/admin/achievements', label: 'Achievements', icon: Trophy, end: false },
   { to: '/admin/services', label: 'Services', icon: Wrench, end: false },
+  { to: '/admin/contact', label: 'Contact Me', icon: Mail, end: false },
   { to: '/admin/messages', label: 'Messages', icon: Mail, end: false },
   { to: '/admin/resume', label: 'Resume', icon: FileText, end: false },
   { to: '/admin/social-links', label: 'Social Links', icon: Link2, end: false },

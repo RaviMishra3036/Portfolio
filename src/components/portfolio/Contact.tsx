@@ -3,8 +3,13 @@ import { motion } from 'framer-motion';
 import { Mail, Send, CheckCircle, MapPin, Phone } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/context/ToastContext';
+import type { Profile } from '@/lib/types';
 
-export default function Contact() {
+interface ContactProps {
+  profile: Profile | null;
+}
+
+export default function Contact({ profile }: ContactProps) {
   const { toast } = useToast();
   const [form, setForm] = useState({
     name: '', email: '', phone: '', subject: '', message: '',
@@ -50,6 +55,27 @@ export default function Contact() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const contactInfo = [
+    {
+      icon: Mail,
+      label: 'Email',
+      value: profile?.email || 'ravikr151204@gmail.com',
+      color: 'text-brand-400',
+    },
+    {
+      icon: Phone,
+      label: 'Phone',
+      value: profile?.phone || '+91 99319 83158',
+      color: 'text-accent-400',
+    },
+    {
+      icon: MapPin,
+      label: 'Location',
+      value: profile?.location || 'Noida, India',
+      color: 'text-brand-300',
+    },
+  ];
+
   const inputClass = "liquid-field w-full px-4 py-3 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-brand-500/40 focus:ring-2 focus:ring-brand-500/15 transition-all";
 
   return (
@@ -75,11 +101,7 @@ export default function Contact() {
           <div className="grid lg:grid-cols-5 gap-6">
             {/* Info cards */}
             <div className="lg:col-span-2 space-y-4">
-              {[
-                { icon: Mail, label: 'Email', value: 'ravikr151204@example.com', color: 'text-brand-400' },
-                { icon: Phone, label: 'Phone', value: '+91 99319 83158', color: 'text-accent-400' },
-                { icon: MapPin, label: 'Location', value: 'Noida, India', color: 'text-brand-300' },
-              ].map((info, i) => (
+              {contactInfo.map((info, i) => (
                 <motion.div
                   key={info.label}
                   initial={{ opacity: 0, x: -20 }}
