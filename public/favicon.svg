@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Ravi Mishra</title>
+  <desc id="desc">RM monogram favicon</desc>
+  <defs>
+    <linearGradient id="bg" x1="8" y1="8" x2="56" y2="56" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0f2742"/>
+      <stop offset="1" stop-color="#07111f"/>
+    </linearGradient>
+    <linearGradient id="mark" x1="15" y1="17" x2="49" y2="48" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#67e8f9"/>
+      <stop offset="1" stop-color="#34d399"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#bg)"/>
+  <path d="M17 48V16h14c8 0 13 4 13 10 0 5-3 8-8 9l9 13h-8l-8-12h-5v12zm7-19h6c4 0 7-1 7-4s-3-4-7-4h-6z" fill="url(#mark)" fill-rule="evenodd"/>
+  <circle cx="51" cy="14" r="3" fill="#fbbf24"/>
+</svg>
