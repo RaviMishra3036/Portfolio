@@ -10,6 +10,10 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  build: {
+    sourcemap: false,
+    target: 'es2020',
+  },
   optimizeDeps: {
     exclude: ['lucide-react'],
   },

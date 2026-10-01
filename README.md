@@ -2,6 +2,12 @@
 
 A modern portfolio website built with React, Vite, TypeScript, Tailwind CSS, and Supabase.
 
+## Copyright Notice
+
+This project is the intellectual property of Ravi Mishra. All rights reserved.
+
+Unauthorized copying, redistribution, reuse, resale, cloning, or commercial use of this source code, design, content, or any part of this project is strictly prohibited without written permission.
+
 ## Overview
 
 This project is a personal portfolio and admin dashboard that lets you:
@@ -70,6 +76,8 @@ VITE_SUPABASE_URL=your_supabase_project_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
+A template is available in `.env.example`.
+
 ## Run Locally
 
 ```bash
@@ -115,7 +123,7 @@ This project uses the SQL migrations under `supabase/migrations/` to create the 
 
 ## License
 
-This project is for personal portfolio use.
+This project is protected by copyright. See the `LICENSE` file for the full legal notice.
 
 ## Author
 
