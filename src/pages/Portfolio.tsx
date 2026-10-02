@@ -18,10 +18,10 @@ import { Loader2 } from 'lucide-react';
 export default function Portfolio() {
   const {
     profile, skills, projects, education,
-    certifications, services, socialLinks, achievements, settings, loading,
+    certifications, services, socialLinks, achievements, settings, loading, loadError,
   } = usePortfolioData();
 
-  if (loading) {
+  if (loading || loadError) {
     return (
       <div
         className="min-h-screen flex items-center justify-center bg-slate-950 px-6"
@@ -35,9 +35,13 @@ export default function Portfolio() {
             <div className="absolute inset-0 animate-spin rounded-full border-4 border-transparent border-t-brand-400 border-r-emerald-400" />
             <Loader2 className="h-8 w-8 animate-spin text-brand-400" aria-hidden="true" />
           </div>
-          <h1 className="font-display text-xl font-semibold text-white">Loading portfolio</h1>
+          <h1 className="font-display text-xl font-semibold text-white">
+            {loadError ? 'Unable to load portfolio' : 'Loading portfolio'}
+          </h1>
           <p className="mt-2 text-sm text-slate-400">
-            Your connection is taking a little longer. Please wait...
+            {loadError
+              ? 'Please check your connection and refresh the page.'
+              : 'Your connection is taking a little longer. Please wait...'}
           </p>
           <div className="mt-6 h-1.5 overflow-hidden rounded-full bg-white/10">
             <div className="h-full w-1/2 animate-pulse rounded-full bg-gradient-to-r from-brand-400 to-emerald-400" />

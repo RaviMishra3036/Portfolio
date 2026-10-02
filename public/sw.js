@@ -1,5 +1,5 @@
 const IMAGE_CACHE = 'portfolio-images-v1';
-const APP_CACHE = 'portfolio-app-v1';
+const APP_CACHE = 'portfolio-app-v3';
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(APP_CACHE).then((cache) => cache.add('/')));
@@ -7,7 +7,13 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(
+    caches.keys().then((cacheNames) => Promise.all(
+      cacheNames
+        .filter((cacheName) => cacheName.startsWith('portfolio-app-') && cacheName !== APP_CACHE)
+        .map((cacheName) => caches.delete(cacheName))
+    )).then(() => self.clients.claim())
+  );
 });
 
 self.addEventListener('fetch', (event) => {

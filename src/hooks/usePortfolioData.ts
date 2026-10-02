@@ -50,6 +50,7 @@ export function usePortfolioData() {
   const [achievements, setAchievements] = useState<Achievement[]>(cached?.achievements || []);
   const [settings, setSettings] = useState<SiteSettings | null>(cached?.settings || null);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
     let disposed = false;
@@ -57,11 +58,7 @@ export function usePortfolioData() {
 
     async function fetchAll() {
       const requestId = ++latestRequestId;
-      const [
-        { data: p }, { data: s }, { data: pr }, { data: ed },
-        { data: ex }, { data: c }, { data: sv }, { data: sl },
-        { data: ac }, { data: st }
-      ] = await Promise.all([
+      const results = await Promise.all([
         supabase.from('profile').select('*').maybeSingle(),
         supabase.from('skills').select('*').order('display_order'),
         supabase.from('projects').select('*').order('created_at', { ascending: false }),
@@ -76,6 +73,18 @@ export function usePortfolioData() {
 
       if (disposed || requestId !== latestRequestId) return;
 
+      const [
+        { data: p }, { data: s }, { data: pr }, { data: ed },
+        { data: ex }, { data: c }, { data: sv }, { data: sl },
+        { data: ac }, { data: st }
+      ] = results;
+      const hasRequestError = results.some(({ error }) => error);
+      if (hasRequestError && !readCachedPortfolio()) {
+        setLoadError(true);
+        setLoading(false);
+        return;
+      }
+
       const onlineData = [p, s, pr, ed, ex, c, sv, sl, ac, st];
       const snapshot = readCachedPortfolio();
       if (onlineData.every((value) => value === null) && snapshot) {
@@ -89,6 +98,7 @@ export function usePortfolioData() {
         setSocialLinks(snapshot.socialLinks);
         setAchievements(snapshot.achievements);
         setSettings(snapshot.settings);
+        setLoadError(false);
         setLoading(false);
         return;
       }
@@ -106,6 +116,7 @@ export function usePortfolioData() {
       setSocialLinks(uniqueSocialLinks);
       setAchievements((ac as Achievement[]) || []);
       setSettings(st as SiteSettings | null);
+      setLoadError(false);
       cachePortfolio({
         profile: p as Profile | null,
         skills: (s as Skill[]) || [],
@@ -121,18 +132,18 @@ export function usePortfolioData() {
       setLoading(false);
     }
 
-    fetchAll();
+    void fetchAll();
 
     const refreshTimer = window.setInterval(fetchAll, 3000);
     const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible') fetchAll();
+      if (document.visibilityState === 'visible') void fetchAll();
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
     const channel = supabase
       .channel('portfolio-data-sync')
       .on('postgres_changes', { event: '*', schema: 'public' }, () => {
-        fetchAll();
+        void fetchAll();
       })
       .subscribe();
 
@@ -146,6 +157,6 @@ export function usePortfolioData() {
 
   return {
     profile, skills, projects, education, experience,
-    certifications, services, socialLinks, achievements, settings, loading,
+    certifications, services, socialLinks, achievements, settings, loading, loadError,
   };
 }
