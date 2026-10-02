@@ -6,7 +6,7 @@ import type {
 } from '@/lib/types';
 
 const PORTFOLIO_CACHE_KEY = 'portfolio-data-cache-v1';
-const PORTFOLIO_REQUEST_TIMEOUT = 10000;
+const PORTFOLIO_REQUEST_TIMEOUT = 5000;
 
 interface PortfolioSnapshot {
   profile: Profile | null;
