@@ -6,6 +6,7 @@ import type {
 } from '@/lib/types';
 
 const PORTFOLIO_CACHE_KEY = 'portfolio-data-cache-v1';
+const PORTFOLIO_REQUEST_TIMEOUT = 10000;
 
 interface PortfolioSnapshot {
   profile: Profile | null;
@@ -37,6 +38,15 @@ function cachePortfolio(snapshot: PortfolioSnapshot) {
   }
 }
 
+function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<never>((_, reject) => {
+      window.setTimeout(() => reject(new Error('Portfolio request timed out')), timeoutMs);
+    }),
+  ]);
+}
+
 export function usePortfolioData() {
   const cached = readCachedPortfolio();
   const [profile, setProfile] = useState<Profile | null>(cached?.profile || null);
@@ -58,18 +68,42 @@ export function usePortfolioData() {
 
     async function fetchAll() {
       const requestId = ++latestRequestId;
-      const results = await Promise.all([
-        supabase.from('profile').select('*').maybeSingle(),
-        supabase.from('skills').select('*').order('display_order'),
-        supabase.from('projects').select('*').order('created_at', { ascending: false }),
-        supabase.from('education').select('*').order('display_order'),
-        supabase.from('experience').select('*').order('display_order'),
-        supabase.from('certifications').select('*').order('display_order'),
-        supabase.from('services').select('*').order('display_order'),
-        supabase.from('social_links').select('*').order('display_order'),
-        supabase.from('achievements').select('*').order('display_order'),
-        supabase.from('site_settings').select('*').order('updated_at', { ascending: false }).limit(1).maybeSingle(),
-      ]);
+      let results;
+
+      try {
+        results = await withTimeout(Promise.all([
+          supabase.from('profile').select('*').maybeSingle(),
+          supabase.from('skills').select('*').order('display_order'),
+          supabase.from('projects').select('*').order('created_at', { ascending: false }),
+          supabase.from('education').select('*').order('display_order'),
+          supabase.from('experience').select('*').order('display_order'),
+          supabase.from('certifications').select('*').order('display_order'),
+          supabase.from('services').select('*').order('display_order'),
+          supabase.from('social_links').select('*').order('display_order'),
+          supabase.from('achievements').select('*').order('display_order'),
+          supabase.from('site_settings').select('*').order('updated_at', { ascending: false }).limit(1).maybeSingle(),
+        ]), PORTFOLIO_REQUEST_TIMEOUT);
+      } catch {
+        if (disposed || requestId !== latestRequestId) return;
+        const snapshot = readCachedPortfolio();
+        if (snapshot) {
+          setProfile(snapshot.profile);
+          setSkills(snapshot.skills);
+          setProjects(snapshot.projects);
+          setEducation(snapshot.education);
+          setExperience(snapshot.experience);
+          setCertifications(snapshot.certifications);
+          setServices(snapshot.services);
+          setSocialLinks(snapshot.socialLinks);
+          setAchievements(snapshot.achievements);
+          setSettings(snapshot.settings);
+          setLoadError(false);
+        } else {
+          setLoadError(true);
+        }
+        setLoading(false);
+        return;
+      }
 
       if (disposed || requestId !== latestRequestId) return;
 
