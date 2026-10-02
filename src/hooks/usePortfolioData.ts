@@ -49,7 +49,7 @@ export function usePortfolioData() {
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>(cached?.socialLinks || []);
   const [achievements, setAchievements] = useState<Achievement[]>(cached?.achievements || []);
   const [settings, setSettings] = useState<SiteSettings | null>(cached?.settings || null);
-  const [loading, setLoading] = useState(!cached);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let disposed = false;
