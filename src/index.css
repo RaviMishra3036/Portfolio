@@ -34,6 +34,14 @@
     overflow-x: clip;
   }
 
+  .content-protected,
+  .content-protected * {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-drag: none;
+  }
+
   .font-display {
     font-family: 'Space Grotesk', sans-serif;
     letter-spacing: -0.02em;

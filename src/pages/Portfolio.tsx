@@ -13,6 +13,7 @@ import ResumeSection from '@/components/portfolio/ResumeSection';
 import Contact from '@/components/portfolio/Contact';
 import Footer from '@/components/portfolio/Footer';
 import AIChat from '@/components/portfolio/AIChat';
+import ContentProtection from '@/components/portfolio/ContentProtection';
 import { Loader2 } from 'lucide-react';
 
 export default function Portfolio() {
@@ -52,7 +53,8 @@ export default function Portfolio() {
   }
 
   return (
-    <div className="portfolio-page relative min-h-screen">
+    <div className="portfolio-page content-protected relative min-h-screen">
+      <ContentProtection />
       <Background3D />
       <Navbar />
       <main>
